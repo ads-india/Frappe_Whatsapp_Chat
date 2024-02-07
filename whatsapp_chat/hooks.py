@@ -8,10 +8,19 @@ app_license = "unlicense"
 
 # Includes in <head>
 # ------------------
+from frappe import __version__ as frappe_version
+
+is_frappe_above_v13 = int(frappe_version.split('.')[0]) > 13
+
+app_include_css = ['whatsapp_chat.bundle.css'] if is_frappe_above_v13 else [
+    '/assets/css/whatsapp_chat.css']
+
+app_include_js = ['whatsapp_chat.bundle.js'] if is_frappe_above_v13 else [
+    '/assets/js/whatsapp_chat.js']
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/whatsapp_chat/css/whatsapp_chat.css"
-# app_include_js = "/assets/whatsapp_chat/js/whatsapp_chat.js"
+# app_include_js = "/assets/whatsapp_chat/js/whatsapp_chat.bundle.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/whatsapp_chat/css/whatsapp_chat.css"
@@ -130,6 +139,12 @@ app_license = "unlicense"
 #	}
 # }
 
+doc_events = {
+    "WhatsApp Message": {
+        "after_insert":"whatsapp_chat.api.message.last_message"
+    }
+}
+
 # Scheduled Tasks
 # ---------------
 
@@ -219,3 +234,9 @@ app_license = "unlicense"
 # auth_hooks = [
 #	"whatsapp_chat.auth.validate"
 # ]
+
+sounds = [
+    {'name': 'chat-notification', 'src': '/assets/chat/sounds/chat-notification.mp3', 'volume': 0.2},
+    {'name': 'chat-message-send', 'src': '/assets/chat/sounds/chat-message-send.mp3', 'volume': 0.2},
+    {'name': 'chat-message-receive', 'src': '/assets/chat/sounds/chat-message-receive.mp3', 'volume': 0.5}
+]
