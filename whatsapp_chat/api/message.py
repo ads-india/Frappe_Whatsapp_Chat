@@ -22,7 +22,7 @@ def get_all(room: str, user_no: str):
             when content_type = 'text' then message
             else attach
         end as content
-        from "tabWhatsApp Message" where "to" = %(user_no)s or "from" = %(user_no)s
+        from `tabWhatsApp Message` where "to" = %(user_no)s or "from" = %(user_no)s
         order by creation asc
     """, {"user_no": user_no}, as_dict=True)
 
