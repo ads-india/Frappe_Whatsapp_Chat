@@ -236,7 +236,7 @@ doc_events = {
 # ]
 
 sounds = [
-    {'name': 'chat-notification', 'src': '/assets/chat/sounds/chat-notification.mp3', 'volume': 0.2},
-    {'name': 'chat-message-send', 'src': '/assets/chat/sounds/chat-message-send.mp3', 'volume': 0.2},
-    {'name': 'chat-message-receive', 'src': '/assets/chat/sounds/chat-message-receive.mp3', 'volume': 0.5}
+    {'name': 'chat-notification', 'src': '/assets/frappe/sounds/email.mp3', 'volume': 0.2},
+    {'name': 'chat-message-send', 'src': '/assets/frappe/sounds/submit.mp3', 'volume': 0.2},
+    {'name': 'chat-message-receive', 'src': '/assets/frappe/sounds/alert.mp3', 'volume': 0.5}
 ]

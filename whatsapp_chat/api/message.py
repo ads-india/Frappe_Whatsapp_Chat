@@ -14,7 +14,7 @@ def get_all(room: str, user_no: str):
     return frappe.db.sql("""
         SELECT creation,
         case
-            when "to" <> '' then "to"
+            when `to` <> '' then `to`
             else
             'Administrator'
         end as sender_user_no,
@@ -22,7 +22,8 @@ def get_all(room: str, user_no: str):
             when content_type = 'text' then message
             else attach
         end as content
-        from `tabWhatsApp Message` where "to" = %(user_no)s or "from" = %(user_no)s
+        from `tabWhatsApp Message` where (`to` = %(user_no)s or `from` = %(user_no)s)
+        AND message_type <> 'Template'
         order by creation asc
     """, {"user_no": user_no}, as_dict=True)
 
@@ -82,7 +83,7 @@ def last_message(doc, method):
         chat_doc = frappe.get_doc("WhatsApp Contact", contact_name)
         chat_doc.last_message = doc.message
         chat_doc.is_read = 0
-        chat_doc.save()
+        chat_doc.save(ignore_permissions=True)
     else:
         frappe.get_doc({
             "doctype": "WhatsApp Contact",
@@ -90,6 +91,6 @@ def last_message(doc, method):
             "last_message": last_message,
             "contact_name": mobile_no,
             "is_read": 0
-        }).save()
+        }).save(ignore_permissions=True)
 
     return "ok"

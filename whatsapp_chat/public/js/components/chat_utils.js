@@ -46,7 +46,6 @@ function is_image(filename) {
 }
 
 async function get_rooms(email) {
-  console.log("dddddddddddddddddddddddd")
   const res = await frappe.call({
     type: 'GET',
     method: 'whatsapp_chat.api.contacts.get',
