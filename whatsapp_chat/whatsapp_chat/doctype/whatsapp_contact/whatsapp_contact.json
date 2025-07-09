@@ -9,7 +9,10 @@
   "mobile_no",
   "is_read",
   "last_message",
-  "email"
+  "email",
+  "reference_section",
+  "reference_doctype",
+  "reference_name"
  ],
  "fields": [
   {
@@ -40,6 +43,23 @@
    "fieldtype": "Link",
    "label": "Email",
    "options": "User"
+  },
+  {
+   "fieldname": "reference_section",
+   "fieldtype": "Section Break",
+   "label": "Reference"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference DocType",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Name",
+   "options": "reference_doctype"
   }
  ],
  "index_web_pages_for_search": 1,
