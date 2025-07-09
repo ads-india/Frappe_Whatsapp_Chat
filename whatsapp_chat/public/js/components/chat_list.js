@@ -26,11 +26,11 @@ export default class ChatList {
 			<div class='chat-list-header'>
 				<h3>${__('Chats')}</h3>
         <div class='chat-list-icons'>
-          <div class='add-room'
+          <div class='add-room' 
             title='Create Private Room'>
             ${frappe.utils.icon('users', 'md')}
           </div>
-          <div class='user-settings'
+          <div class='user-settings' 
           title='Settings' style="display:none">
           ${frappe.utils.icon('setting-gear', 'md')}
           </div>
@@ -45,9 +45,9 @@ export default class ChatList {
 		<div class='chat-search'>
 			<div class='input-group'>
 				<input class='form-control chat-search-box'
-				type='search'
+				type='search' 
 				placeholder='${__('Search conversation')}'
-				>
+				>	
 				<span class='search-icon'>
 					${frappe.utils.icon('search', 'sm')}
 				</span>
@@ -213,27 +213,10 @@ export default class ChatList {
         frappe.utils.play_sound('chat-notification');
       }
 
-      // Prevent creating a duplicate room if an event arrives late
-      const room_exists = me.chat_rooms.some(room => room[0] === res.room);
-      if (room_exists) {
-        return;
-      }
-
-      // Construct a complete profile for the new ChatRoom instance
-      const profile = {
-        user: me.user,
-        user_email: res.mobile_no, // This is the contact's identifier
-        last_message: res.last_message,
-        last_date: res.last_date,
-        is_admin: me.is_admin,
-        room: res.room,
-        is_read: res.is_read,
-        room_name: res.room_name,
-        room_type: res.type,
-        opposite_person_email: res.mobile_no,
-      };
-
-      me.create_new_room(profile);
+      res.user = me.user;
+      res.is_admin = me.is_admin;
+      res.user_email = me.user_email;
+      me.create_new_room(res);
     });
 
     frappe.realtime.on('private_room_creation', function (res) {
