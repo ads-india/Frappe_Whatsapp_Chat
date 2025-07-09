@@ -393,7 +393,7 @@ export default class ChatSpace {
 
   receive_message(res, time) {
     let chat_type = 'sender';
-    if (res.sender_user_no === this.profile.user_email) {
+    if (res.sender_user_no === this.chat_list.user_email) {
       return;
     }
 
