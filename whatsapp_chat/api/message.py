@@ -37,7 +37,6 @@ def mark_as_read(room):
     return "ok"
 
 
-
 @frappe.whitelist()
 def send(content, user, room, user_no, attachment=None):
     content_type = "text"
@@ -77,20 +76,37 @@ def last_message(doc, method):
     else:
         mobile_no = doc.get("from")
 
+    message_content = doc.message or doc.attach
+    room_name = frappe.db.get_value("WhatsApp Contact", filters={"mobile_no": mobile_no})
 
-    contact_name = frappe.db.get_value("WhatsApp Contact", filters={"mobile_no": mobile_no})
-    if contact_name:
-        chat_doc = frappe.get_doc("WhatsApp Contact", contact_name)
-        chat_doc.last_message = doc.message
+    if room_name:
+        chat_doc = frappe.get_doc("WhatsApp Contact", room_name)
+        chat_doc.last_message = message_content
         chat_doc.is_read = 0
         chat_doc.save(ignore_permissions=True)
+
+        message_for_publish = {
+            "room": chat_doc.name,
+            "content": message_content,
+            "creation": chat_doc.creation
+        }
+        frappe.publish_realtime(
+            event="latest_chat_updates", message=message_for_publish, after_commit=True
+        )
     else:
-        frappe.get_doc({
+        new_contact = frappe.get_doc({
             "doctype": "WhatsApp Contact",
             "mobile_no": mobile_no,
-            "last_message": last_message,
+            "last_message": message_content,
             "contact_name": mobile_no,
             "is_read": 0
         }).save(ignore_permissions=True)
+
+        message_for_publish = {
+            "room": new_contact.name,
+            "room_name": mobile_no,
+            **new_contact.as_dict()
+        }
+        frappe.publish_realtime(event="new_room_creation", message=message_for_publish, after_commit=True)
 
     return "ok"
